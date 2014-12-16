@@ -1,9 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package loanbankgui;
+
+import controller.LoanBrokerGateway;
+import webserviceclient.LoanResponse;
 
 /**
  *
@@ -11,12 +9,14 @@ package loanbankgui;
  */
 public class LoanGui extends javax.swing.JFrame {
 
+    private LoanBrokerGateway loanBrokerGateway;
+    
     /**
      * Creates new form LoanGui
      */
     public LoanGui() {
+        loanBrokerGateway = new LoanBrokerGateway();
         initComponents();
-       
     }
 
     /**
@@ -118,10 +118,13 @@ public class LoanGui extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       
         vaildate();
+        Double loanAmount = Double.parseDouble(jTextField2.getText());
+        String ssn = jTextField1.getText();
+        int loanDuration = Integer.parseInt(jTextField3.getText());
+        LoanResponse response = loanBrokerGateway.getLoanResponse(loanAmount, ssn, loanDuration);
         
-        
+        jLabel4.setText(response.getBankName() + ": " + response.getInterrestRate() + "\n" + "SSN: " + response.getSsn());
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed

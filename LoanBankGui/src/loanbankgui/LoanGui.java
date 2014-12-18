@@ -1,6 +1,8 @@
 package loanbankgui;
 
 import controller.LoanBrokerGateway;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import webserviceclient.LoanResponse;
 
 /**
@@ -17,6 +19,20 @@ public class LoanGui extends javax.swing.JFrame {
     public LoanGui() {
         loanBrokerGateway = new LoanBrokerGateway();
         initComponents();
+        setLocationRelativeTo(null);
+    } 
+    
+    // Test method for 50 LoanRequests
+    private void test() {
+        for (int i = 0; i < 50; i++) {
+            try {
+                Thread.sleep(100);
+                LoanResponse response = loanBrokerGateway.getLoanResponse(200000, "101010-1010", 360);
+                System.out.println("RESPONSE:\n BANK NAME:" + response.getBankName() + "\nINTEREST RATE: " + response.getInterrestRate());
+            } catch (InterruptedException ex) {
+                Logger.getLogger(LoanGui.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     /**
@@ -45,7 +61,7 @@ public class LoanGui extends javax.swing.JFrame {
 
         jLabel3.setText("Loan Duration:");
 
-        jLabel4.setText("Info label of importen stuff");
+        jLabel4.setText("Information label");
 
         jButton1.setText("Submit ");
         jButton1.setActionCommand("Sumit");
@@ -72,10 +88,14 @@ public class LoanGui extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -86,11 +106,7 @@ public class LoanGui extends javax.swing.JFrame {
                             .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
                             .addComponent(jTextField2)
                             .addComponent(jTextField3))))
-                .addContainerGap(82, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addContainerGap())
+                .addContainerGap(43, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -108,8 +124,8 @@ public class LoanGui extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(34, 34, 34)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
@@ -124,7 +140,7 @@ public class LoanGui extends javax.swing.JFrame {
         int loanDuration = Integer.parseInt(jTextField3.getText());
         LoanResponse response = loanBrokerGateway.getLoanResponse(loanAmount, ssn, loanDuration);
         
-        jLabel4.setText(response.getBankName() + ": " + response.getInterrestRate() + "\n" + "SSN: " + response.getSsn());
+        jLabel4.setText("<html>" + "Bank name: " + response.getBankName() + "<br>" + "Interest rate: " + response.getInterrestRate() + "%" + "<br>" + "SSN: " + response.getSsn() + "</html>");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
@@ -182,7 +198,7 @@ public class LoanGui extends javax.swing.JFrame {
 
     private void vaildate() {
         if(!jTextField1.getText().isEmpty() && !jTextField2.getText().isEmpty() && !jTextField3.getText().isEmpty() ){
-           jLabel4.setText("You have submit your loan request");
+           jLabel4.setText("You have submitted your loan request");
        }else{
           if(jTextField1.getText().isEmpty()){
               jLabel4.setText("Missing a ssn");
